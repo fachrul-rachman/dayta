@@ -49,4 +49,3 @@ class DailyEntry extends Model
         return $this->morphMany(Flag::class, 'scope');
     }
 }
-

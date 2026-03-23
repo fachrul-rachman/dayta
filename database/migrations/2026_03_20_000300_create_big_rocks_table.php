@@ -28,4 +28,3 @@ return new class extends Migration
         Schema::dropIfExists('big_rocks');
     }
 };
-

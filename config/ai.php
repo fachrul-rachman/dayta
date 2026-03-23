@@ -9,4 +9,3 @@ return [
         'model' => env('AI_SUMMARY_MODEL'),
     ],
 ];
-

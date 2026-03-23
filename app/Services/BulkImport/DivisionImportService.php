@@ -9,7 +9,7 @@ class DivisionImportService
 {
     public function preview(string $path): DivisionImportResult
     {
-        $result = new DivisionImportResult();
+        $result = new DivisionImportResult;
 
         $rows = SimpleExcelReader::create($path)->getRows();
 
@@ -80,7 +80,7 @@ class DivisionImportService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $rows
+     * @param  array<int, array<string, mixed>>  $rows
      */
     public function commit(array $rows): array
     {
@@ -136,4 +136,3 @@ class DivisionImportService
         };
     }
 }
-

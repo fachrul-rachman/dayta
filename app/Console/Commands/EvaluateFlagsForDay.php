@@ -27,4 +27,3 @@ class EvaluateFlagsForDay extends Command
         return self::SUCCESS;
     }
 }
-

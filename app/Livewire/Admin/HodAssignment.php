@@ -11,6 +11,7 @@ use Livewire\Component;
 class HodAssignment extends Component
 {
     public ?int $division_id = null;
+
     public ?int $hod_user_id = null;
 
     public function save(): void

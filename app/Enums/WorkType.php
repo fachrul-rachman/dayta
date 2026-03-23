@@ -8,4 +8,3 @@ enum WorkType: string
     case Operational = 'operational';
     case AdHoc = 'ad_hoc';
 }
-

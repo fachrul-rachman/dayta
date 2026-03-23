@@ -6,7 +6,6 @@ use App\Enums\FlagSeverity;
 use App\Enums\UserRole;
 use App\Models\AiSummary;
 use App\Models\DailyEntry;
-use App\Models\DailyEntryItem;
 use App\Models\Division;
 use App\Models\Flag;
 use App\Models\User;
@@ -16,7 +15,9 @@ use Livewire\Component;
 class Company extends Component
 {
     public ?string $date_from = null;
+
     public ?string $date_to = null;
+
     public ?AiSummary $summary = null;
 
     public function mount(): void
@@ -194,7 +195,7 @@ class Company extends Component
         $topFlags = Flag::query()
             ->when($this->date_from, fn ($q) => $q->whereDate('flagged_at', '>=', $this->date_from))
             ->when($this->date_to, fn ($q) => $q->whereDate('flagged_at', '<=', $this->date_to))
-            ->orderByRaw("case severity when ? then 3 when ? then 2 when ? then 1 else 0 end desc", [
+            ->orderByRaw('case severity when ? then 3 when ? then 2 when ? then 1 else 0 end desc', [
                 FlagSeverity::High->value,
                 FlagSeverity::Medium->value,
                 FlagSeverity::Low->value,

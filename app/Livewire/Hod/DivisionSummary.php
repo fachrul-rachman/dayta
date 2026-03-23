@@ -4,19 +4,19 @@ namespace App\Livewire\Hod;
 
 use App\Enums\FlagSeverity;
 use App\Enums\UserRole;
+use App\Models\AiSummary;
 use App\Models\DailyEntry;
 use App\Models\Flag;
 use App\Models\User;
-use App\Models\AiSummary;
 use App\Services\AiSummaryService;
 use Livewire\Component;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 
 class DivisionSummary extends Component
 {
     public ?string $date_from = null;
+
     public ?string $date_to = null;
+
     public ?AiSummary $summary = null;
 
     public function mount(): void

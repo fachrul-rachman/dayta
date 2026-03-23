@@ -31,4 +31,3 @@ class DailyEntryFactory extends Factory
         ];
     }
 }
-

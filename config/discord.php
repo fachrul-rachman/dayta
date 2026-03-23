@@ -5,4 +5,3 @@ return [
     'webhook_url' => env('DISCORD_WEBHOOK_URL'),
     'timeout' => (int) env('DISCORD_NOTIFICATION_TIMEOUT', 5),
 ];
-

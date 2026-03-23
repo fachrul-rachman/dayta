@@ -38,4 +38,3 @@ class AdminAndDirectorSeeder extends Seeder
         );
     }
 }
-

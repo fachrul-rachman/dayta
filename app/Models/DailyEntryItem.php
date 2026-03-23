@@ -36,4 +36,3 @@ class DailyEntryItem extends Model
         return $this->belongsTo(BigRock::class);
     }
 }
-

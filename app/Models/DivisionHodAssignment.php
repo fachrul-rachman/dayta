@@ -33,4 +33,3 @@ class DivisionHodAssignment extends Model
         return $this->belongsTo(User::class, 'hod_user_id');
     }
 }
-

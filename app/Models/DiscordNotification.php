@@ -29,4 +29,3 @@ class DiscordNotification extends Model
         'failed_at' => 'datetime',
     ];
 }
-

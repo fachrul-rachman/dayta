@@ -71,6 +71,6 @@ class ReportTimingService
             return null;
         }
 
-        return CarbonImmutable::parse($base->toDateString() . ' ' . $time, $base->getTimezone());
+        return CarbonImmutable::parse($base->toDateString().' '.$time, $base->getTimezone());
     }
 }

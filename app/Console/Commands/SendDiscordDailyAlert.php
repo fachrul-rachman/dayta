@@ -27,4 +27,3 @@ class SendDiscordDailyAlert extends Command
         return self::SUCCESS;
     }
 }
-

@@ -8,8 +8,11 @@ use Livewire\Component;
 class ReportSettings extends Component
 {
     public string $plan_open_rule = '';
+
     public string $plan_close_rule = '';
+
     public string $realization_open_rule = '';
+
     public string $realization_close_rule = '';
 
     public ?ReportSetting $current = null;

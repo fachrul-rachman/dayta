@@ -32,4 +32,3 @@ class UserImportResult
 
     public int $errors = 0;
 }
-

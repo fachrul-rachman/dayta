@@ -1,6 +1,20 @@
 <?php
 
 use App\Enums\UserRole;
+use App\Livewire\Admin\AdminHome;
+use App\Livewire\Admin\HodAssignment;
+use App\Livewire\Admin\Notifications;
+use App\Livewire\Admin\Override;
+use App\Livewire\Admin\ReportSettings;
+use App\Livewire\Admin\Users;
+use App\Livewire\Director\Company;
+use App\Livewire\Director\Divisions;
+use App\Livewire\Hod\BigRockManagement;
+use App\Livewire\Hod\DivisionEntries;
+use App\Livewire\Hod\DivisionSummary;
+use App\Livewire\Manager\DailyEntry;
+use App\Livewire\Manager\Dashboard;
+use App\Livewire\Manager\History;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -24,38 +38,38 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified', 'role:manager'])->group(function () {
-    Livewire::component('manager.dashboard', \App\Livewire\Manager\Dashboard::class);
-    Livewire::component('manager.daily-entry', \App\Livewire\Manager\DailyEntry::class);
-    Livewire::component('manager.history', \App\Livewire\Manager\History::class);
+    Livewire::component('manager.dashboard', Dashboard::class);
+    Livewire::component('manager.daily-entry', DailyEntry::class);
+    Livewire::component('manager.history', History::class);
 
-    Route::get('/manager/dashboard', \App\Livewire\Manager\Dashboard::class)->name('manager.dashboard');
-    Route::get('/manager/daily-entry', \App\Livewire\Manager\DailyEntry::class)->name('manager.daily-entry');
-    Route::get('/manager/history', \App\Livewire\Manager\History::class)->name('manager.history');
+    Route::get('/manager/dashboard', Dashboard::class)->name('manager.dashboard');
+    Route::get('/manager/daily-entry', DailyEntry::class)->name('manager.daily-entry');
+    Route::get('/manager/history', History::class)->name('manager.history');
 });
 
 Route::middleware(['auth', 'verified', 'role:hod'])->group(function () {
-    Route::get('/hod/dashboard', \App\Livewire\Hod\Dashboard::class)->name('hod.dashboard');
-    Route::get('/hod/daily-entry', \App\Livewire\Hod\DailyEntry::class)->name('hod.daily-entry');
-    Route::get('/hod/history', \App\Livewire\Hod\History::class)->name('hod.history');
-    Route::get('/hod/big-rocks', \App\Livewire\Hod\BigRockManagement::class)->name('hod.big-rocks');
-    Route::get('/hod/division-entries', \App\Livewire\Hod\DivisionEntries::class)->name('hod.division-entries');
-    Route::get('/hod/division-summary', \App\Livewire\Hod\DivisionSummary::class)->name('hod.division-summary');
+    Route::get('/hod/dashboard', App\Livewire\Hod\Dashboard::class)->name('hod.dashboard');
+    Route::get('/hod/daily-entry', App\Livewire\Hod\DailyEntry::class)->name('hod.daily-entry');
+    Route::get('/hod/history', App\Livewire\Hod\History::class)->name('hod.history');
+    Route::get('/hod/big-rocks', BigRockManagement::class)->name('hod.big-rocks');
+    Route::get('/hod/division-entries', DivisionEntries::class)->name('hod.division-entries');
+    Route::get('/hod/division-summary', DivisionSummary::class)->name('hod.division-summary');
 });
 
 Route::middleware(['auth', 'verified', 'role:director'])->group(function () {
-    Route::get('/director/dashboard', \App\Livewire\Director\Dashboard::class)->name('director.dashboard');
-    Route::get('/director/company', \App\Livewire\Director\Company::class)->name('director.company');
-    Route::get('/director/divisions', \App\Livewire\Director\Divisions::class)->name('director.divisions');
+    Route::get('/director/dashboard', App\Livewire\Director\Dashboard::class)->name('director.dashboard');
+    Route::get('/director/company', Company::class)->name('director.company');
+    Route::get('/director/divisions', Divisions::class)->name('director.divisions');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
-    Route::get('/admin', \App\Livewire\Admin\AdminHome::class)->name('admin.home');
-    Route::get('/admin/users', \App\Livewire\Admin\Users::class)->name('admin.users');
-    Route::get('/admin/divisions', \App\Livewire\Admin\Divisions::class)->name('admin.divisions');
-    Route::get('/admin/hod-assignment', \App\Livewire\Admin\HodAssignment::class)->name('admin.hod-assignment');
-    Route::get('/admin/report-settings', \App\Livewire\Admin\ReportSettings::class)->name('admin.report-settings');
-    Route::get('/admin/override', \App\Livewire\Admin\Override::class)->name('admin.override');
-    Route::get('/admin/notifications', \App\Livewire\Admin\Notifications::class)->name('admin.notifications');
+    Route::get('/admin', AdminHome::class)->name('admin.home');
+    Route::get('/admin/users', Users::class)->name('admin.users');
+    Route::get('/admin/divisions', App\Livewire\Admin\Divisions::class)->name('admin.divisions');
+    Route::get('/admin/hod-assignment', HodAssignment::class)->name('admin.hod-assignment');
+    Route::get('/admin/report-settings', ReportSettings::class)->name('admin.report-settings');
+    Route::get('/admin/override', Override::class)->name('admin.override');
+    Route::get('/admin/notifications', Notifications::class)->name('admin.notifications');
 
     Route::get('/admin/divisions/import-template', function () {
         $path = public_path('excel/Template Form Divisi.xlsx');

@@ -3,9 +3,9 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Division;
+use App\Services\BulkImport\DivisionImportService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Services\BulkImport\DivisionImportService;
 
 class Divisions extends Component
 {
@@ -14,6 +14,7 @@ class Divisions extends Component
     public ?int $editingId = null;
 
     public string $name = '';
+
     public bool $is_active = true;
 
     public bool $showImportModal = false;

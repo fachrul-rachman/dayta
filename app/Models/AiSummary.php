@@ -32,4 +32,3 @@ class AiSummary extends Model
         return $this->belongsTo(User::class, 'generated_by_user_id');
     }
 }
-

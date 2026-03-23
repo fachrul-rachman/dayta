@@ -8,4 +8,3 @@ enum FlagSeverity: string
     case Medium = 'medium';
     case High = 'high';
 }
-

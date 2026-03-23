@@ -22,4 +22,3 @@ class ReportSetting extends Model
         'is_active' => 'boolean',
     ];
 }
-

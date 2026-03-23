@@ -25,4 +25,3 @@ class FlagFactory extends Factory
         ];
     }
 }
-

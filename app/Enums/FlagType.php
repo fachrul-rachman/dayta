@@ -9,4 +9,3 @@ enum FlagType: string
     case OperationalDominance = 'operational_dominance';
     case RepetitiveInput = 'repetitive_input';
 }
-

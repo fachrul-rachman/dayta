@@ -21,8 +21,7 @@ class FlagEvaluationService
 {
     public function __construct(
         protected ReportTimingService $timing,
-    ) {
-    }
+    ) {}
 
     public function evaluateForDay(CarbonImmutable $day): void
     {
@@ -404,4 +403,3 @@ class FlagEvaluationService
         }
     }
 }
-

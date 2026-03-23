@@ -31,4 +31,3 @@ class Notifications extends Component
         ])->layout('layouts.app');
     }
 }
-

@@ -9,4 +9,3 @@ enum UserRole: string
     case Director = 'director';
     case Admin = 'admin';
 }
-

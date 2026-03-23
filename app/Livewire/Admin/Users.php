@@ -4,8 +4,8 @@ namespace App\Livewire\Admin;
 
 use App\Enums\UserRole;
 use App\Models\Division;
-use App\Services\BulkImport\UserImportService;
 use App\Models\User;
+use App\Services\BulkImport\UserImportService;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -19,10 +19,15 @@ class Users extends Component
     public ?int $editingId = null;
 
     public string $name = '';
+
     public string $email = '';
+
     public string $role = 'manager';
+
     public ?int $division_id = null;
+
     public bool $is_active = true;
+
     public string $password = '';
 
     public bool $showImportModal = false;

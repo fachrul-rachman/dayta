@@ -8,6 +8,7 @@ use Livewire\Component;
 class History extends Component
 {
     public ?string $from = null;
+
     public ?string $to = null;
 
     public function mount(): void

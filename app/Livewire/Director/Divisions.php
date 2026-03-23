@@ -3,6 +3,7 @@
 namespace App\Livewire\Director;
 
 use App\Enums\FlagSeverity;
+use App\Enums\UserRole;
 use App\Enums\WorkType;
 use App\Models\AiSummary;
 use App\Models\DailyEntry;
@@ -15,8 +16,11 @@ use Livewire\Component;
 class Divisions extends Component
 {
     public ?int $division_id = null;
+
     public ?string $date_from = null;
+
     public ?string $date_to = null;
+
     public ?AiSummary $summary = null;
 
     public function mount(): void
@@ -112,7 +116,7 @@ class Divisions extends Component
                 ->pluck('total', 'entry_date');
 
             $divisionReporters = $selectedDivision->users()
-                ->whereIn('role', [\App\Enums\UserRole::Manager, \App\Enums\UserRole::Hod])
+                ->whereIn('role', [UserRole::Manager, UserRole::Hod])
                 ->where('is_active', true)
                 ->count();
 
@@ -196,7 +200,7 @@ class Divisions extends Component
 
         if ($selectedDivision) {
             $divisionFlags = $flagsQuery
-                ->orderByRaw("case severity when ? then 3 when ? then 2 when ? then 1 else 0 end desc", [
+                ->orderByRaw('case severity when ? then 3 when ? then 2 when ? then 1 else 0 end desc', [
                     FlagSeverity::High->value,
                     FlagSeverity::Medium->value,
                     FlagSeverity::Low->value,

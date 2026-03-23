@@ -8,6 +8,7 @@ use Livewire\Component;
 class DivisionEntries extends Component
 {
     public ?string $date_from = null;
+
     public ?string $date_to = null;
 
     public function mount(): void

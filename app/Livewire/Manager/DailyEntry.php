@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Manager;
 
+use App\Enums\BigRockStatus;
 use App\Enums\DailyPlanStatus;
 use App\Enums\DailyRealizationStatus;
 use App\Enums\WorkType;
@@ -9,6 +10,7 @@ use App\Models\BigRock;
 use App\Models\DailyEntry as DailyEntryModel;
 use App\Models\DailyEntryItem;
 use App\Models\ReportSetting;
+use App\Services\FlagEvaluationService;
 use App\Services\ReportTimingService;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -123,7 +125,7 @@ class DailyEntry extends Component
 
         $this->persistItems(draft: false);
 
-        app(\App\Services\FlagEvaluationService::class)->evaluateForEntry($this->entry);
+        app(FlagEvaluationService::class)->evaluateForEntry($this->entry);
     }
 
     private function loadItems(): void
@@ -247,7 +249,7 @@ class DailyEntry extends Component
         $toDelete = $existing->keys()->diff($seen);
 
         if ($toDelete->isNotEmpty()) {
-        $this->entry->items()->whereIn('id', $toDelete)->delete();
+            $this->entry->items()->whereIn('id', $toDelete)->delete();
         }
     }
 
@@ -330,7 +332,7 @@ class DailyEntry extends Component
 
         return BigRock::query()
             ->where('division_id', $user->division_id)
-            ->where('status', \App\Enums\BigRockStatus::Active)
+            ->where('status', BigRockStatus::Active)
             ->orderBy('title')
             ->get();
     }

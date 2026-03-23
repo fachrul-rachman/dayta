@@ -10,7 +10,7 @@ namespace App\Services\BulkImport;
  *   is_active: ?bool,
  *   action: 'create'|'update'|null,
  *   status: 'ok'|'error',
-   *   error: ?string
+ *   error: ?string
  * }
  */
 class DivisionImportResult
@@ -28,4 +28,3 @@ class DivisionImportResult
 
     public int $errors = 0;
 }
-

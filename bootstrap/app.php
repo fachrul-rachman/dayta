@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\EnsureUserIsActive;
-use App\Http\Middleware\EnsureUserHasRole;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

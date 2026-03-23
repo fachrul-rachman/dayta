@@ -14,7 +14,7 @@ class UserImportService
 {
     public function preview(string $path): UserImportResult
     {
-        $result = new UserImportResult();
+        $result = new UserImportResult;
 
         $rows = SimpleExcelReader::create($path)->getRows();
 

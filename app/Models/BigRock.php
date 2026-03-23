@@ -35,4 +35,3 @@ class BigRock extends Model
         return $this->hasMany(DailyEntryItem::class);
     }
 }
-

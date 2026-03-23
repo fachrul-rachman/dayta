@@ -7,19 +7,24 @@ use App\Models\DailyEntry;
 use App\Models\DailyEntryItem;
 use App\Models\Division;
 use App\Models\User;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class Override extends Component
 {
     public ?string $date_from = null;
+
     public ?string $date_to = null;
+
     public ?int $division_id = null;
+
     public ?int $user_id = null;
 
     public ?int $target_entry_id = null;
+
     public ?int $target_item_id = null;
+
     public string $new_text = '';
+
     public string $reason = '';
 
     public function mount(): void

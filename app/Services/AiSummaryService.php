@@ -51,7 +51,7 @@ class AiSummaryService
             ."2) Ringkasan divisi: 2-3 kalimat yang menjelaskan kondisi dan pola utama, berdasarkan konteks.\n"
             ."3) Masalah: daftar poin singkat. Setiap poin, jika memungkinkan, menyebutkan user atau tim tertentu yang ada di konteks dan menjelaskan masalah konkretnya (misalnya belum mengisi laporan, sering muncul di flag, dan sebagainya). Jika tidak ada masalah yang jelas, sebutkan itu secara eksplisit.\n"
             ."4) Langkah berikutnya: 2-3 poin tindakan praktis yang bisa diambil HoD atau Director, tetap hanya berdasarkan konteks.\n"
-            ."Jangan lebih dari 12 baris total. Jangan membuat angka detail yang tidak tersurat dari konteks.";
+            .'Jangan lebih dari 12 baris total. Jangan membuat angka detail yang tidak tersurat dari konteks.';
 
         $text = null;
 
