@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
+use App\Models\Division;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +26,8 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $division = Division::query()->inRandomOrder()->first();
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
@@ -33,6 +37,9 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
+            'role' => UserRole::Manager,
+            'division_id' => $division?->id,
+            'is_active' => true,
         ];
     }
 
@@ -55,6 +62,38 @@ class UserFactory extends Factory
             'two_factor_secret' => encrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
+        ]);
+    }
+
+    public function manager(Division $division): static
+    {
+        return $this->state(fn () => [
+            'role' => UserRole::Manager,
+            'division_id' => $division->id,
+        ]);
+    }
+
+    public function hod(Division $division): static
+    {
+        return $this->state(fn () => [
+            'role' => UserRole::Hod,
+            'division_id' => $division->id,
+        ]);
+    }
+
+    public function director(): static
+    {
+        return $this->state(fn () => [
+            'role' => UserRole::Director,
+            'division_id' => null,
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn () => [
+            'role' => UserRole::Admin,
+            'division_id' => null,
         ]);
     }
 }

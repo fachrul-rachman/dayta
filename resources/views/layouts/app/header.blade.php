@@ -7,39 +7,9 @@
         <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden mr-2" icon="bars-2" inset="left" />
 
-            <x-app-logo href="{{ route('dashboard') }}" wire:navigate />
-
-            <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('Dashboard') }}
-                </flux:navbar.item>
-            </flux:navbar>
+            <x-app-logo href="{{ route('home') }}" wire:navigate />
 
             <flux:spacer />
-
-            <flux:navbar class="me-1.5 space-x-0.5 rtl:space-x-reverse py-0!">
-                <flux:tooltip :content="__('Search')" position="bottom">
-                    <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" />
-                </flux:tooltip>
-                <flux:tooltip :content="__('Repository')" position="bottom">
-                    <flux:navbar.item
-                        class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="folder-git-2"
-                        href="https://github.com/laravel/livewire-starter-kit"
-                        target="_blank"
-                        :label="__('Repository')"
-                    />
-                </flux:tooltip>
-                <flux:tooltip :content="__('Documentation')" position="bottom">
-                    <flux:navbar.item
-                        class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="book-open-text"
-                        href="https://laravel.com/docs/starter-kits#livewire"
-                        target="_blank"
-                        :label="__('Documentation')"
-                    />
-                </flux:tooltip>
-            </flux:navbar>
 
             <x-desktop-user-menu />
         </flux:header>
@@ -47,27 +17,89 @@
         <!-- Mobile Menu -->
         <flux:sidebar collapsible="mobile" sticky class="lg:hidden border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.header>
-                <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
+                <x-app-logo :sidebar="true" href="{{ route('home') }}" wire:navigate />
                 <flux:sidebar.collapse class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')">
-                    <flux:sidebar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard')  }}
-                    </flux:sidebar.item>
-                </flux:sidebar.group>
+                @php
+                    $user = auth()->user();
+                @endphp
+
+                @if ($user)
+                    @if ($user->role === \App\Enums\UserRole::Manager)
+                        <flux:sidebar.group :heading="__('Platform')">
+                            <flux:sidebar.item icon="layout-grid" :href="route('manager.dashboard')" :current="request()->routeIs('manager.*')" wire:navigate>
+                                {{ __('Dashboard')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="book-open-text" :href="route('manager.daily-entry')" :current="request()->routeIs('manager.daily-entry')" wire:navigate>
+                                {{ __('Daily Entry')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="folder-git-2" :href="route('manager.history')" :current="request()->routeIs('manager.history')" wire:navigate>
+                                {{ __('History')  }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    @elseif ($user->role === \App\Enums\UserRole::Hod)
+                        <flux:sidebar.group :heading="__('Platform')">
+                            <flux:sidebar.item icon="layout-grid" :href="route('hod.dashboard')" :current="request()->routeIs('hod.dashboard')" wire:navigate>
+                                {{ __('Dashboard')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="book-open-text" :href="route('hod.daily-entry')" :current="request()->routeIs('hod.daily-entry')" wire:navigate>
+                                {{ __('Daily Entry')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="folder-git-2" :href="route('hod.history')" :current="request()->routeIs('hod.history')" wire:navigate>
+                                {{ __('History')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="layout-grid" :href="route('hod.big-rocks')" :current="request()->routeIs('hod.big-rocks')" wire:navigate>
+                                {{ __('Big Rocks')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="layout-grid" :href="route('hod.division-entries')" :current="request()->routeIs('hod.division-entries')" wire:navigate>
+                                {{ __('Division Entries')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="layout-grid" :href="route('hod.division-summary')" :current="request()->routeIs('hod.division-summary')" wire:navigate>
+                                {{ __('Division Summary')  }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    @elseif ($user->role === \App\Enums\UserRole::Director)
+                        <flux:sidebar.group :heading="__('Platform')">
+                            <flux:sidebar.item icon="layout-grid" :href="route('director.dashboard')" :current="request()->routeIs('director.dashboard')" wire:navigate>
+                                {{ __('Dashboard')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="book-open-text" :href="route('director.company')" :current="request()->routeIs('director.company')" wire:navigate>
+                                {{ __('Company')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="folder-git-2" :href="route('director.divisions')" :current="request()->routeIs('director.divisions')" wire:navigate>
+                                {{ __('Divisions')  }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    @elseif ($user->role === \App\Enums\UserRole::Admin)
+                        <flux:sidebar.group :heading="__('Platform')">
+                            <flux:sidebar.item icon="layout-grid" :href="route('admin.home')" :current="request()->routeIs('admin.home')" wire:navigate>
+                                {{ __('Admin Home')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="book-open-text" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>
+                                {{ __('Users')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="folder-git-2" :href="route('admin.divisions')" :current="request()->routeIs('admin.divisions')" wire:navigate>
+                                {{ __('Divisions')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="layout-grid" :href="route('admin.hod-assignment')" :current="request()->routeIs('admin.hod-assignment')" wire:navigate>
+                                {{ __('HoD Assignment')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="layout-grid" :href="route('admin.report-settings')" :current="request()->routeIs('admin.report-settings')" wire:navigate>
+                                {{ __('Report Settings')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="layout-grid" :href="route('admin.override')" :current="request()->routeIs('admin.override')" wire:navigate>
+                                {{ __('Override')  }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    @endif
+                @endif
             </flux:sidebar.nav>
 
             <flux:spacer />
 
             <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
             </flux:sidebar.nav>
         </flux:sidebar>
 

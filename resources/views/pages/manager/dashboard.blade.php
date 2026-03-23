@@ -1,0 +1,28 @@
+<div class="flex flex-1 flex-col gap-4 rounded-xl">
+    <div class="grid auto-rows-min gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <x-dashboard.card
+            title="Today"
+            :value="now()->toFormattedDateString()"
+        />
+        <x-dashboard.card
+            title="Plan Status"
+            :value="$todayEntry?->plan_status?->name ?? 'LOCKED'"
+            :href="route('manager.daily-entry')"
+        />
+        <x-dashboard.card
+            title="Realization Status"
+            :value="$todayEntry?->realization_status?->name ?? 'LOCKED'"
+            :href="route('manager.daily-entry')"
+        />
+        <x-dashboard.card
+            title="Latest History"
+            :value="$latestEntry?->entry_date?->toFormattedDateString() ?? '—'"
+            :href="route('manager.history')"
+        />
+        <x-dashboard.card
+            title="Personal Flags"
+            :value="$flagsCount"
+            :href="route('manager.history')"
+        />
+    </div>
+</div>
