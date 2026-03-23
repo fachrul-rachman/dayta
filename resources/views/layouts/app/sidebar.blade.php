@@ -21,10 +21,10 @@
                             <flux:sidebar.item icon="layout-grid" :href="route('manager.dashboard')" :current="request()->routeIs('manager.dashboard')" wire:navigate>
                                 {{ __('Dashboard') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="book-open-text" :href="route('manager.daily-entry')" :current="request()->routeIs('manager.daily-entry')" wire:navigate>
+                            <flux:sidebar.item icon="calendar-days" :href="route('manager.daily-entry')" :current="request()->routeIs('manager.daily-entry')" wire:navigate>
                                 {{ __('Daily Entry') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="folder-git-2" :href="route('manager.history')" :current="request()->routeIs('manager.history')" wire:navigate>
+                            <flux:sidebar.item icon="archive-box" :href="route('manager.history')" :current="request()->routeIs('manager.history')" wire:navigate>
                                 {{ __('History') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
@@ -66,20 +66,23 @@
                             <flux:sidebar.item icon="layout-grid" :href="route('admin.home')" :current="request()->routeIs('admin.home')" wire:navigate>
                                 {{ __('Admin Home') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="book-open-text" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>
+                            <flux:sidebar.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>
                                 {{ __('Users') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="folder-git-2" :href="route('admin.divisions')" :current="request()->routeIs('admin.divisions')" wire:navigate>
+                            <flux:sidebar.item icon="building-office" :href="route('admin.divisions')" :current="request()->routeIs('admin.divisions')" wire:navigate>
                                 {{ __('Divisions') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('admin.hod-assignment')" :current="request()->routeIs('admin.hod-assignment')" wire:navigate>
+                            <flux:sidebar.item icon="briefcase" :href="route('admin.hod-assignment')" :current="request()->routeIs('admin.hod-assignment')" wire:navigate>
                                 {{ __('HoD Assignment') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('admin.report-settings')" :current="request()->routeIs('admin.report-settings')" wire:navigate>
+                            <flux:sidebar.item icon="adjustments-horizontal" :href="route('admin.report-settings')" :current="request()->routeIs('admin.report-settings')" wire:navigate>
                                 {{ __('Report Settings') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('admin.override')" :current="request()->routeIs('admin.override')" wire:navigate>
+                            <flux:sidebar.item icon="arrow-path" :href="route('admin.override')" :current="request()->routeIs('admin.override')" wire:navigate>
                                 {{ __('Override') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="bell-alert" :href="route('admin.notifications')" :current="request()->routeIs('admin.notifications')" wire:navigate>
+                                {{ __('Notification History') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
                     @endif

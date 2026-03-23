@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\FlagSeverity;
+use App\Enums\FlagType;
 use App\Enums\ScopeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class Flag extends Model
     protected $fillable = [
         'scope_type',
         'scope_id',
+        'type',
         'severity',
         'flagged_at',
         'title',
@@ -24,6 +26,7 @@ class Flag extends Model
         'scope_type' => ScopeType::class,
         'severity' => FlagSeverity::class,
         'flagged_at' => 'datetime',
+        'type' => FlagType::class,
     ];
 
     public function scope()
@@ -31,4 +34,3 @@ class Flag extends Model
         return $this->morphTo();
     }
 }
-

@@ -27,6 +27,7 @@ class Dashboard extends Component
         $divisionFlags = Flag::query()
             ->where('scope_type', 'division')
             ->where('scope_id', $user->division_id)
+            ->whereDate('flagged_at', $today)
             ->count();
 
         return view('pages.hod.dashboard', [

@@ -49,7 +49,7 @@
         </div>
         <div class="mt-4 grid gap-4 md:grid-cols-2">
             <div class="flex flex-col items-center" wire:ignore>
-                <h3 class="text-xs font-semibold text-zinc-800 dark:text-zinc-100">
+                <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
                     {{ __('Team Submission') }}
                 </h3>
                 <canvas
@@ -61,9 +61,19 @@
                 <p class="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 text-center">
                     {{ __('Submitted vs not submitted for the selected period (distinct reporting users).') }}
                 </p>
+                <div class="mt-1 flex gap-3 text-[11px] text-zinc-500 dark:text-zinc-400">
+                    <span class="inline-flex items-center gap-1">
+                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                        {{ __('Submitted') }}
+                    </span>
+                    <span class="inline-flex items-center gap-1">
+                        <span class="h-2 w-2 rounded-full bg-zinc-300 dark:bg-zinc-600"></span>
+                        {{ __('Not submitted') }}
+                    </span>
+                </div>
             </div>
             <div class="flex flex-col items-center" wire:ignore>
-                <h3 class="text-xs font-semibold text-zinc-800 dark:text-zinc-100">
+                <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
                     {{ __('Division Flags') }}
                 </h3>
                 <canvas
@@ -75,13 +85,21 @@
                 <p class="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 text-center">
                     {{ __('Flag distribution by severity for the selected period.') }}
                 </p>
+                <div class="mt-1 flex flex-wrap justify-center gap-3 text-[11px] text-zinc-500 dark:text-zinc-400">
+                    @foreach ($flagLabels as $label)
+                        <span class="inline-flex items-center gap-1">
+                            <span class="h-2 w-2 rounded-full bg-zinc-300 dark:bg-zinc-600"></span>
+                            {{ $label }}
+                        </span>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
 
     <div class="rounded-xl border border-zinc-200 bg-white p-4 text-xs shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
         <div class="flex items-center justify-between">
-            <h3 class="text-xs font-semibold text-zinc-800 dark:text-zinc-100">
+            <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
                 {{ __('AI Summary') }}
             </h3>
             <button
@@ -98,7 +116,7 @@
                     <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
                         {{ __('Last generated on') }} {{ optional($summary->created_at)->format('Y-m-d H:i') }}
                     </p>
-                    <p class="text-xs text-zinc-700 whitespace-pre-line dark:text-zinc-100">
+                    <p class="text-sm text-zinc-700 whitespace-pre-line dark:text-zinc-100">
                         {{ $summary->summary }}
                     </p>
                 </div>

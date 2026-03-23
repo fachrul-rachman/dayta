@@ -1,8 +1,11 @@
 <div class="flex flex-1 flex-col gap-4 rounded-xl">
     <div class="rounded-xl border border-zinc-200 bg-white p-4 text-xs shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
-        <h2 class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-            {{ __('Current Settings') }}
+        <h2 class="text-base font-semibold text-zinc-900 dark:text-zinc-50">
+            {{ __('Report Settings') }}
         </h2>
+        <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+            {{ __('Control reporting windows, timezones, and health rules.') }}
+        </p>
         <div class="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
             <div>
                 <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
@@ -46,9 +49,16 @@
             <button
                 type="button"
                 wire:click="save"
-                class="inline-flex items-center rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                wire:loading.attr="disabled"
+                wire:target="save"
+                class="inline-flex items-center rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
             >
-                {{ __('Save Settings') }}
+                <span wire:loading.remove wire:target="save">
+                    {{ __('Save Settings') }}
+                </span>
+                <span wire:loading wire:target="save">
+                    {{ __('Saving...') }}
+                </span>
             </button>
         </div>
     </div>

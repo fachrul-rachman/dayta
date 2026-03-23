@@ -4,7 +4,9 @@ use App\Enums\UserRole;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', function () {
+    return redirect()->route('login');
+})->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::view('/unauthorized', 'unauthorized')->name('unauthorized');
@@ -53,6 +55,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/admin/hod-assignment', \App\Livewire\Admin\HodAssignment::class)->name('admin.hod-assignment');
     Route::get('/admin/report-settings', \App\Livewire\Admin\ReportSettings::class)->name('admin.report-settings');
     Route::get('/admin/override', \App\Livewire\Admin\Override::class)->name('admin.override');
+    Route::get('/admin/notifications', \App\Livewire\Admin\Notifications::class)->name('admin.notifications');
 });
 
 require __DIR__.'/settings.php';

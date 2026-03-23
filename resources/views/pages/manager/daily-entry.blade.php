@@ -16,10 +16,16 @@
                     </div>
                     <div class="flex gap-2 text-xs">
                         <span class="inline-flex items-center rounded-full bg-zinc-100 px-3 py-1 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-                            {{ __('Plan:') }} {{ $this->entry?->plan_status?->name ?? 'LOCKED' }}
+                            {{ __('Plan:') }}
+                            <span class="ms-1 inline-flex items-center rounded-full bg-white px-2 py-0.5 text-[11px] font-medium text-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
+                                {{ $this->entry?->plan_status?->name ?? 'LOCKED' }}
+                            </span>
                         </span>
                         <span class="inline-flex items-center rounded-full bg-zinc-100 px-3 py-1 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-                            {{ __('Realization:') }} {{ $this->entry?->realization_status?->name ?? 'LOCKED' }}
+                            {{ __('Realization:') }}
+                            <span class="ms-1 inline-flex items-center rounded-full bg-white px-2 py-0.5 text-[11px] font-medium text-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
+                                {{ $this->entry?->realization_status?->name ?? 'LOCKED' }}
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -55,9 +61,16 @@
                             <button
                                 type="button"
                                 wire:click="addItem"
-                                class="inline-flex items-center rounded-full bg-zinc-900 px-3 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                                wire:loading.attr="disabled"
+                                wire:target="addItem"
+                                class="inline-flex items-center rounded-full bg-zinc-900 px-3 py-1 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
                             >
-                                {{ __('Add Item') }}
+                                <span wire:loading.remove wire:target="addItem">
+                                    {{ __('Add Item') }}
+                                </span>
+                                <span wire:loading wire:target="addItem">
+                                    {{ __('Adding...') }}
+                                </span>
                             </button>
                         @endif
                     </div>
@@ -100,7 +113,7 @@
                                             wire:model.defer="{{ $mode === 'plan' ? "planItems.$index.description" : "realizationItems.$index.description" }}"
                                             rows="2"
                                             @readonly(! $isEditable)
-                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                                         ></textarea>
                                         @error(($mode === 'plan' ? "planItems.$index.description" : "realizationItems.$index.description"))<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                                     </div>
@@ -120,7 +133,7 @@
                                         </label>
                                         <select
                                             wire:model.defer="{{ $mode === 'plan' ? "planItems.$index.work_type" : "realizationItems.$index.work_type" }}"
-                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                                         >
                                             <option value="big_rock">{{ __('Big Rock') }}</option>
                                             <option value="operational">{{ __('Operational') }}</option>
@@ -134,7 +147,7 @@
                                         <select
                                             wire:model.defer="{{ $mode === 'plan' ? "planItems.$index.big_rock_id" : "realizationItems.$index.big_rock_id" }}"
                                             @disabled(! $isEditable)
-                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                                         >
                                             <option value="">{{ __('None') }}</option>
                                             @foreach ($availableBigRocks as $bigRock)
@@ -152,7 +165,7 @@
                                             min="0"
                                             wire:model.defer="{{ $mode === 'plan' ? "planItems.$index.planned_hours" : "realizationItems.$index.realized_hours" }}"
                                             @disabled(! $isEditable)
-                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                            class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                                         />
                                     </div>
                                 </div>
@@ -165,7 +178,7 @@
                                         wire:model.defer="{{ $mode === 'plan' ? "planItems.$index.notes" : "realizationItems.$index.notes" }}"
                                         rows="2"
                                         @readonly(! $isEditable)
-                                        class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                        class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                                     ></textarea>
                                 </div>
                             </div>

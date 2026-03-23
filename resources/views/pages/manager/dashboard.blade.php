@@ -7,22 +7,27 @@
         <x-dashboard.card
             title="Plan Status"
             :value="$todayEntry?->plan_status?->name ?? 'LOCKED'"
+            helper="Today's plan window status"
             :href="route('manager.daily-entry')"
         />
         <x-dashboard.card
             title="Realization Status"
             :value="$todayEntry?->realization_status?->name ?? 'LOCKED'"
+            helper="Today's realization window status"
             :href="route('manager.daily-entry')"
         />
         <x-dashboard.card
             title="Latest History"
             :value="$latestEntry?->entry_date?->toFormattedDateString() ?? '—'"
+            helper="Most recent submitted entry"
             :href="route('manager.history')"
         />
         <x-dashboard.card
             title="Personal Flags"
             :value="$flagsCount"
+            helper="Flags linked to your entries"
             :href="route('manager.history')"
         />
     </div>
 </div>
+

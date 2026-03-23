@@ -122,6 +122,8 @@ class DailyEntry extends Component
         }
 
         $this->persistItems(draft: false);
+
+        app(\App\Services\FlagEvaluationService::class)->evaluateForEntry($this->entry);
     }
 
     private function loadItems(): void

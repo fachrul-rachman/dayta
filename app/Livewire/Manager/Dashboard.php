@@ -22,8 +22,9 @@ class Dashboard extends Component
             ->orderByDesc('entry_date')
             ->first();
 
-        $flagsCount = Flag::where('scope_type', 'personal')
+        $flagsCount = Flag::where('scope_type', 'user')
             ->where('scope_id', $user->id)
+            ->whereDate('flagged_at', $today)
             ->count();
 
         return view('pages.manager.dashboard', [

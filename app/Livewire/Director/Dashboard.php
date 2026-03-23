@@ -31,7 +31,9 @@ class Dashboard extends Component
             ? round(($companyEntriesToday / $totalReporters) * 100)
             : null;
 
-        $companyFlags = Flag::query()->count();
+        $companyFlags = Flag::query()
+            ->whereDate('flagged_at', $today)
+            ->count();
 
         $divisions = Division::orderBy('name')->get();
 
