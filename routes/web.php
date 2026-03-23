@@ -56,6 +56,22 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/admin/report-settings', \App\Livewire\Admin\ReportSettings::class)->name('admin.report-settings');
     Route::get('/admin/override', \App\Livewire\Admin\Override::class)->name('admin.override');
     Route::get('/admin/notifications', \App\Livewire\Admin\Notifications::class)->name('admin.notifications');
+
+    Route::get('/admin/divisions/import-template', function () {
+        $path = public_path('excel/Template Form Divisi.xlsx');
+
+        abort_unless(is_file($path), 404);
+
+        return response()->download($path, 'Template Form Divisi.xlsx');
+    })->name('admin.divisions.import-template');
+
+    Route::get('/admin/users/import-template', function () {
+        $path = public_path('excel/Template Form User.xlsx');
+
+        abort_unless(is_file($path), 404);
+
+        return response()->download($path, 'Template Form User.xlsx');
+    })->name('admin.users.import-template');
 });
 
 require __DIR__.'/settings.php';

@@ -4,12 +4,18 @@ namespace App\Livewire\Admin;
 
 use App\Enums\UserRole;
 use App\Models\Division;
+use App\Services\BulkImport\UserImportService;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class Users extends Component
 {
+    use WithFileUploads;
+    use WithPagination;
+
     public ?int $editingId = null;
 
     public string $name = '';
@@ -18,6 +24,39 @@ class Users extends Component
     public ?int $division_id = null;
     public bool $is_active = true;
     public string $password = '';
+
+    public bool $showImportModal = false;
+
+    public $importFile;
+
+    /** @var array<int, array<string, mixed>> */
+    public array $importRows = [];
+
+    public int $importTotal = 0;
+
+    public int $importCreates = 0;
+
+    public int $importUpdates = 0;
+
+    public int $importErrors = 0;
+
+    public bool $importCommitted = false;
+
+    public ?string $filterRole = null;
+
+    public ?int $filterDivisionId = null;
+
+    public ?string $filterStatus = null;
+
+    public string $search = '';
+
+    protected $queryString = [
+        'filterRole' => ['except' => null],
+        'filterDivisionId' => ['except' => null],
+        'filterStatus' => ['except' => null],
+        'search' => ['except' => ''],
+        'page' => ['except' => 1],
+    ];
 
     public function create(): void
     {
@@ -94,6 +133,89 @@ class Users extends Component
         $this->editingId = null;
     }
 
+    public function updatedFilterRole(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterDivisionId(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterStatus(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function openImport(): void
+    {
+        $this->resetImportState();
+        $this->showImportModal = true;
+    }
+
+    public function previewImport(UserImportService $service): void
+    {
+        $this->resetErrorBag();
+
+        $this->validate([
+            'importFile' => ['required', 'file'],
+        ]);
+
+        $path = $this->importFile->getRealPath();
+
+        $result = $service->preview($path);
+
+        $this->importRows = $result->rows;
+        $this->importTotal = $result->total;
+        $this->importCreates = $result->creates;
+        $this->importUpdates = $result->updates;
+        $this->importErrors = $result->errors;
+        $this->importCommitted = false;
+    }
+
+    public function commitImport(UserImportService $service): void
+    {
+        if (! $this->importFile) {
+            return;
+        }
+
+        $service->commit($this->importFile->getRealPath());
+
+        $this->importCommitted = true;
+
+        $this->importRows = [];
+        $this->importTotal = 0;
+        $this->importCreates = 0;
+        $this->importUpdates = 0;
+        $this->importErrors = 0;
+
+        $this->dispatch('users-imported');
+    }
+
+    public function closeImport(): void
+    {
+        $this->resetImportState();
+        $this->showImportModal = false;
+    }
+
+    private function resetImportState(): void
+    {
+        $this->importFile = null;
+        $this->importRows = [];
+        $this->importTotal = 0;
+        $this->importCreates = 0;
+        $this->importUpdates = 0;
+        $this->importErrors = 0;
+        $this->importCommitted = false;
+        $this->resetErrorBag();
+    }
+
     private function resetForm(): void
     {
         $this->name = '';
@@ -107,8 +229,37 @@ class Users extends Component
 
     public function render()
     {
+        $usersQuery = User::with('division');
+
+        if ($this->filterRole) {
+            $usersQuery->where('role', $this->filterRole);
+        }
+
+        if ($this->filterDivisionId) {
+            $usersQuery->where('division_id', $this->filterDivisionId);
+        }
+
+        if ($this->filterStatus === 'active') {
+            $usersQuery->where('is_active', true);
+        } elseif ($this->filterStatus === 'inactive') {
+            $usersQuery->where('is_active', false);
+        }
+
+        if ($this->search !== '') {
+            $search = $this->search;
+
+            $usersQuery->where(function ($query) use ($search) {
+                $query->where('name', 'ILIKE', '%'.$search.'%')
+                    ->orWhere('email', 'ILIKE', '%'.$search.'%');
+            });
+        }
+
+        $users = $usersQuery
+            ->orderBy('name')
+            ->paginate(20);
+
         return view('pages.admin.users', [
-            'users' => User::with('division')->orderBy('name')->get(),
+            'users' => $users,
             'divisions' => Division::orderBy('name')->get(),
             'roles' => UserRole::cases(),
         ])->layout('layouts.app');
