@@ -32,7 +32,7 @@ class History extends Component
             $query->whereDate('entry_date', '<=', $this->to);
         }
 
-        $entries = $query->with('items')->limit(60)->get();
+        $entries = $query->with('items.attachments')->limit(60)->get();
 
         return view('pages.manager.history', [
             'entries' => $entries,

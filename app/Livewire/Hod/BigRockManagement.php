@@ -67,9 +67,13 @@ class BigRockManagement extends Component
                 ->where('division_id', $user->division_id)
                 ->whereKey($this->editingId)
                 ->update($payload);
+
+            $this->dispatch('toast', message: __('Big Rock updated.'), type: 'success');
         } else {
             $bigRock = BigRock::create($payload);
             $this->editingId = $bigRock->id;
+
+            $this->dispatch('toast', message: __('Big Rock created.'), type: 'success');
         }
     }
 
@@ -81,6 +85,8 @@ class BigRockManagement extends Component
             ->where('division_id', $user->division_id)
             ->whereKey($id)
             ->update(['status' => BigRockStatus::Archived]);
+
+        $this->dispatch('toast', message: __('Big Rock archived.'), type: 'success');
     }
 
     private function resetForm(): void

@@ -6,5 +6,5 @@ use App\Livewire\Manager\DailyEntry as ManagerDailyEntry;
 
 class DailyEntry extends ManagerDailyEntry
 {
-    // inherits render() with layouts.app
+    // inherits behavior from manager daily entry
 }

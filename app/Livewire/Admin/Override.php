@@ -77,6 +77,8 @@ class Override extends Component
         $this->new_text = '';
         $this->reason = '';
         $this->resetErrorBag();
+
+        $this->dispatch('toast', message: __('Override submitted successfully.'), type: 'success');
     }
 
     public function render()

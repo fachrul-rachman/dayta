@@ -51,6 +51,8 @@ class ReportSettings extends Component
         }
 
         $this->saved = true;
+
+        $this->dispatch('toast', message: __('Settings saved successfully.'), type: 'success');
     }
 
     public function render()

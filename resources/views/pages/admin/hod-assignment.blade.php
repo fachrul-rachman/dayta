@@ -11,25 +11,25 @@
                     <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                         {{ __('Division') }}
                     </label>
-                    <select wire:model.defer="division_id" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
+                    <select wire:model.defer="division_id" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
                         <option value="">{{ __('Select division') }}</option>
                         @foreach ($divisions as $division)
                             <option value="{{ $division->id }}">{{ $division->name }}</option>
                         @endforeach
                     </select>
-                    @error('division_id')<p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>@enderror
+                    @error('division_id')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                         {{ __('HoD') }}
                     </label>
-                    <select wire:model.defer="hod_user_id" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
+                    <select wire:model.defer="hod_user_id" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
                         <option value="">{{ __('Select HoD') }}</option>
                         @foreach ($hods as $hod)
                             <option value="{{ $hod->id }}">{{ $hod->name }}</option>
                         @endforeach
                     </select>
-                    @error('hod_user_id')<p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>@enderror
+                    @error('hod_user_id')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
             </div>
             <div class="mt-4 flex justify-end">
@@ -38,7 +38,7 @@
                     wire:click="save"
                     wire:loading.attr="disabled"
                     wire:target="save"
-                    class="inline-flex items-center rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                    class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-500 dark:hover:bg-indigo-400"
                 >
                     <span wire:loading.remove wire:target="save">
                         {{ __('Save Assignment') }}

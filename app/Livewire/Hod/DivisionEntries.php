@@ -23,7 +23,7 @@ class DivisionEntries extends Component
         $user = auth()->user();
 
         $query = DailyEntry::query()
-            ->with(['user', 'items'])
+            ->with(['user', 'items.attachments'])
             ->where('division_id', $user->division_id)
             ->orderByDesc('entry_date');
 

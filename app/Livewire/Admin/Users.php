@@ -136,6 +136,8 @@ class Users extends Component
 
         $this->resetForm();
         $this->editingId = null;
+
+        $this->dispatch('toast', message: __('User saved successfully.'), type: 'success');
     }
 
     public function updatedFilterRole(): void
@@ -201,6 +203,8 @@ class Users extends Component
         $this->importErrors = 0;
 
         $this->dispatch('users-imported');
+
+        $this->dispatch('toast', message: __('Users imported successfully.'), type: 'success');
     }
 
     public function closeImport(): void

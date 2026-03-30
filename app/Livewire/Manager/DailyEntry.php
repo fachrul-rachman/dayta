@@ -9,14 +9,18 @@ use App\Enums\WorkType;
 use App\Models\BigRock;
 use App\Models\DailyEntry as DailyEntryModel;
 use App\Models\DailyEntryItem;
+use App\Models\DailyEntryItemAttachment;
 use App\Models\ReportSetting;
 use App\Services\FlagEvaluationService;
 use App\Services\ReportTimingService;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class DailyEntry extends Component
 {
+    use WithFileUploads;
+
     public string $mode = 'plan';
 
     public ?DailyEntryModel $entry = null;
@@ -26,6 +30,12 @@ class DailyEntry extends Component
 
     /** @var array<int, array<string, mixed>> */
     public array $realizationItems = [];
+
+    /** @var array<int, array<int, mixed>> */
+    public array $planUploads = [];
+
+    /** @var array<int, array<int, mixed>> */
+    public array $realizationUploads = [];
 
     public ?ReportSetting $settings = null;
 
@@ -111,6 +121,8 @@ class DailyEntry extends Component
         }
 
         $this->persistItems(draft: true);
+
+        $this->dispatch('toast', message: __('Draft saved successfully.'), type: 'success');
     }
 
     public function submit(): void
@@ -126,6 +138,8 @@ class DailyEntry extends Component
         $this->persistItems(draft: false);
 
         app(FlagEvaluationService::class)->evaluateForEntry($this->entry);
+
+        $this->dispatch('toast', message: __('Entry submitted successfully.'), type: 'success');
     }
 
     private function loadItems(): void
@@ -133,13 +147,16 @@ class DailyEntry extends Component
         if (! $this->entry) {
             $this->planItems = [];
             $this->realizationItems = [];
+            $this->planUploads = [];
+            $this->realizationUploads = [];
 
             return;
         }
 
-        $items = $this->entry->items()->get()->groupBy(function (DailyEntryItem $item) {
+        $items = $this->entry->items()->with('attachments')->get()->groupBy(function (DailyEntryItem $item) {
             return $item->planned_hours !== null && $item->planned_hours >= 0 ? 'plan' : 'realization';
         });
+        $this->entry->setRelation('items', $items->flatten());
 
         $this->planItems = $items->get('plan', collect())->map(fn (DailyEntryItem $item) => [
             'id' => $item->id,
@@ -158,6 +175,9 @@ class DailyEntry extends Component
             'realized_hours' => $item->realized_hours,
             'notes' => $item->notes,
         ])->values()->all();
+
+        $this->planUploads = [];
+        $this->realizationUploads = [];
     }
 
     private function persistItems(bool $draft): void
@@ -173,6 +193,7 @@ class DailyEntry extends Component
                 'planItems.*.big_rock_id' => 'nullable|integer',
                 'planItems.*.planned_hours' => 'nullable|numeric|min:0',
                 'planItems.*.notes' => 'nullable|string',
+                'planUploads.*.*' => 'file',
             ]);
 
             $this->entry->plan_status = $draft ? DailyPlanStatus::Draft : DailyPlanStatus::Submitted;
@@ -184,7 +205,7 @@ class DailyEntry extends Component
 
             $this->entry->save();
 
-            $this->syncItems($this->planItems, true);
+            $this->syncItems($this->planItems, true, $this->planUploads);
         } else {
             $this->validate([
                 'realizationItems' => 'array|min:1',
@@ -193,6 +214,7 @@ class DailyEntry extends Component
                 'realizationItems.*.big_rock_id' => 'nullable|integer',
                 'realizationItems.*.realized_hours' => 'nullable|numeric|min:0',
                 'realizationItems.*.notes' => 'nullable|string',
+                'realizationUploads.*.*' => 'file',
             ]);
 
             $this->entry->realization_status = $draft ? DailyRealizationStatus::Draft : DailyRealizationStatus::Submitted;
@@ -204,7 +226,7 @@ class DailyEntry extends Component
 
             $this->entry->save();
 
-            $this->syncItems($this->realizationItems, false);
+            $this->syncItems($this->realizationItems, false, $this->realizationUploads);
         }
 
         $this->loadItems();
@@ -213,7 +235,7 @@ class DailyEntry extends Component
     /**
      * @param  array<int, array<string, mixed>>  $items
      */
-    private function syncItems(array $items, bool $isPlan): void
+    private function syncItems(array $items, bool $isPlan, array $uploads = []): void
     {
         $existing = $this->entry->items()
             ->when($isPlan, fn ($q) => $q->whereNotNull('planned_hours'))
@@ -223,7 +245,7 @@ class DailyEntry extends Component
 
         $seen = [];
 
-        foreach ($items as $row) {
+        foreach ($items as $rowIndex => $row) {
             $id = $row['id'] ?? null;
 
             $plannedHours = $isPlan ? ($row['planned_hours'] ?? 0) : null;
@@ -238,11 +260,49 @@ class DailyEntry extends Component
                 'notes' => $row['notes'] ?? null,
             ];
 
+            $itemModel = null;
+
             if ($id && $existing->has($id)) {
                 $existing[$id]->update($data);
+                $itemModel = $existing[$id];
                 $seen[] = $id;
             } else {
-                $this->entry->items()->create($data);
+                $itemModel = $this->entry->items()->create($data);
+                $seen[] = $itemModel->id;
+            }
+
+            if ($itemModel && isset($uploads[$rowIndex])) {
+                foreach ((array) $uploads[$rowIndex] as $file) {
+                    if (! $file) {
+                        continue;
+                    }
+
+                    $disk = config('reporting.attachments_disk');
+                    $basePath = trim(config('reporting.attachments_path'), '/');
+
+                    $path = $file->storeAs(
+                        $basePath.'/'.$this->entry->entry_date->toDateString().'/'.$this->entry->user_id,
+                        uniqid('att_').'-'.$file->getClientOriginalName(),
+                        $disk
+                    );
+                    $size = 0;
+                    try {
+                        $reportedSize = $file->getSize();
+                        if (is_int($reportedSize) && $reportedSize >= 0) {
+                            $size = $reportedSize;
+                        }
+                    } catch (\Throwable $e) {
+                        $size = 0;
+                    }
+
+                    DailyEntryItemAttachment::create([
+                        'daily_entry_item_id' => $itemModel->id,
+                        'file_path' => $path,
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_mime' => $file->getMimeType(),
+                        'file_size' => $size,
+                    ]);
+                }
             }
         }
 

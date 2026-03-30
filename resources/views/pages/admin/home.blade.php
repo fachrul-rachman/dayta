@@ -19,6 +19,7 @@
             title="Report Settings"
             :value="$hasActiveSettings ? 'Configured' : 'Missing'"
             :href="route('admin.report-settings')"
+            :variant="$hasActiveSettings ? 'success' : 'danger'"
         />
         <x-dashboard.card
             title="Override"

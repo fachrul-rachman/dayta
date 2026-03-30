@@ -9,12 +9,24 @@
             :value="$todayEntry?->plan_status?->name ?? 'LOCKED'"
             helper="Today's plan window status"
             :href="route('manager.daily-entry')"
+            :variant="match($todayEntry?->plan_status?->name) {
+                'SUBMITTED' => 'success',
+                'DRAFT' => 'warning',
+                'OPEN' => 'warning',
+                default => 'default',
+            }"
         />
         <x-dashboard.card
             title="Realization Status"
             :value="$todayEntry?->realization_status?->name ?? 'LOCKED'"
             helper="Today's realization window status"
             :href="route('manager.daily-entry')"
+            :variant="match($todayEntry?->realization_status?->name) {
+                'SUBMITTED' => 'success',
+                'DRAFT' => 'warning',
+                'OPEN' => 'warning',
+                default => 'default',
+            }"
         />
         <x-dashboard.card
             title="Latest History"
@@ -27,7 +39,7 @@
             :value="$flagsCount"
             helper="Flags linked to your entries"
             :href="route('manager.history')"
+            :variant="$flagsCount > 0 ? 'danger' : 'default'"
         />
     </div>
 </div>
-

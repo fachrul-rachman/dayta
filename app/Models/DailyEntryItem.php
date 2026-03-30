@@ -35,4 +35,9 @@ class DailyEntryItem extends Model
     {
         return $this->belongsTo(BigRock::class);
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(DailyEntryItemAttachment::class, 'daily_entry_item_id');
+    }
 }

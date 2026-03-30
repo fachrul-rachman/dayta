@@ -43,6 +43,8 @@ class HodAssignment extends Component
 
         $this->reset(['division_id', 'hod_user_id']);
         $this->resetErrorBag();
+
+        $this->dispatch('toast', message: __('HoD assignment saved.'), type: 'success');
     }
 
     public function render()

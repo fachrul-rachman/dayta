@@ -1,4 +1,4 @@
-<div class="flex flex-1 flex-col gap-4 rounded-xl">
+<div class="flex flex-1 flex-col gap-4 rounded-xl" x-data="{ showForm: @entangle('editingId').live !== null || false }">
         <div class="flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
             <div>
                 <h2 class="text-base font-semibold text-zinc-900 dark:text-zinc-50">
@@ -14,7 +14,7 @@
                     wire:click="openImport"
                     wire:loading.attr="disabled"
                     wire:target="openImport"
-                    class="inline-flex items-center rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-800 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-700"
+                    class="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-800 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-700"
                 >
                     <span wire:loading.remove wire:target="openImport">
                         {{ __('Upload Users') }}
@@ -28,7 +28,8 @@
                     wire:click="create"
                     wire:loading.attr="disabled"
                     wire:target="create"
-                    class="inline-flex items-center rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                    @click="showForm = true"
+                    class="inline-flex items-center rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-500 dark:hover:bg-indigo-400"
                 >
                     <span wire:loading.remove wire:target="create">
                         {{ __('Create User') }}
@@ -41,54 +42,59 @@
         </div>
 
         <div class="grid gap-4 md:grid-cols-[2fr,3fr]">
-            <div class="rounded-xl border border-zinc-200 bg-white p-4 text-xs shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
-                <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
-                    {{ $editingId ? __('Edit User') : __('New User') }}
-                </h3>
+            <div x-show="showForm" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="rounded-xl border border-zinc-200 bg-white p-4 text-xs shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
+                        {{ $editingId ? __('Edit User') : __('New User') }}
+                    </h3>
+                    <button type="button" @click="showForm = false" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+                        <span class="text-lg">&times;</span>
+                    </button>
+                </div>
                 <div class="mt-3 space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                             {{ __('Name') }}
                         </label>
-                        <input type="text" wire:model.defer="name" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
-                        @error('name')<p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>@enderror
+                        <input type="text" wire:model.defer="name" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
+                        @error('name')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                             {{ __('Email') }}
                         </label>
-                        <input type="email" wire:model.defer="email" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
-                        @error('email')<p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>@enderror
+                        <input type="email" wire:model.defer="email" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
+                        @error('email')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                             {{ __('Role') }}
                         </label>
-                        <select wire:model.defer="role" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
+                        <select wire:model.defer="role" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
                             @foreach ($roles as $roleOption)
                                 <option value="{{ $roleOption->value }}">{{ ucfirst($roleOption->name) }}</option>
                             @endforeach
                         </select>
-                        @error('role')<p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>@enderror
+                        @error('role')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                             {{ __('Division') }}
                         </label>
-                        <select wire:model.defer="division_id" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
+                        <select wire:model.defer="division_id" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
                             <option value="">{{ __('None') }}</option>
                             @foreach ($divisions as $division)
                                 <option value="{{ $division->id }}">{{ $division->name }}</option>
                             @endforeach
                         </select>
-                        @error('division_id')<p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>@enderror
+                        @error('division_id')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                             {{ $editingId ? __('Password (leave blank to keep)') : __('Password') }}
                         </label>
-                        <input type="password" wire:model.defer="password" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
-                        @error('password')<p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>@enderror
+                        <input type="password" wire:model.defer="password" class="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50">
+                        @error('password')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
                     <div class="flex items-center gap-2">
                         <input type="checkbox" wire:model.defer="is_active" id="is_active" class="h-3 w-3 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-600 dark:text-zinc-100">
@@ -103,7 +109,7 @@
                             wire:click="save"
                             wire:loading.attr="disabled"
                             wire:target="save"
-                            class="inline-flex items-center rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                            class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-500 dark:hover:bg-indigo-400"
                         >
                             <span wire:loading.remove wire:target="save">
                                 {{ __('Save') }}
@@ -118,21 +124,21 @@
             <div class="rounded-xl border border-zinc-200 bg-white p-4 text-xs shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
                 <div class="flex items-center justify-between gap-3">
                     <div>
-                        <h3 class="text-xs font-semibold text-zinc-800 dark:text-zinc-100">
+                        <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
                             {{ __('Users') }}
                         </h3>
-                        <p class="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+                        <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                             {{ __('Filter by role, division, status, or search by name/email.') }}
                         </p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-2 text-[11px]">
+                    <div class="flex flex-wrap items-center gap-2 text-xs">
                         <div>
-                            <label class="block text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                            <label class="block text-xs font-medium text-zinc-500 dark:text-zinc-400">
                                 {{ __('Role') }}
                             </label>
                             <select
                                 wire:model.live="filterRole"
-                                class="mt-0.5 rounded-lg border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                class="mt-0.5 rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                             >
                                 <option value="">{{ __('All') }}</option>
                                 @foreach ($roles as $roleOption)
@@ -141,12 +147,12 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                            <label class="block text-xs font-medium text-zinc-500 dark:text-zinc-400">
                                 {{ __('Division') }}
                             </label>
                             <select
                                 wire:model.live="filterDivisionId"
-                                class="mt-0.5 rounded-lg border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                class="mt-0.5 rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                             >
                                 <option value="">{{ __('All') }}</option>
                                 @foreach ($divisions as $division)
@@ -155,12 +161,12 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                            <label class="block text-xs font-medium text-zinc-500 dark:text-zinc-400">
                                 {{ __('Status') }}
                             </label>
                             <select
                                 wire:model.live="filterStatus"
-                                class="mt-0.5 rounded-lg border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                class="mt-0.5 rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                             >
                                 <option value="">{{ __('All') }}</option>
                                 <option value="active">{{ __('Active') }}</option>
@@ -168,14 +174,14 @@
                             </select>
                         </div>
                         <div class="w-36">
-                            <label class="block text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                            <label class="block text-xs font-medium text-zinc-500 dark:text-zinc-400">
                                 {{ __('Search') }}
                             </label>
                             <input
                                 type="text"
                                 wire:model.live.debounce.400ms="search"
                                 placeholder="{{ __('Name or email') }}"
-                                class="mt-0.5 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-[11px] text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
+                                class="mt-0.5 w-full rounded-lg border border-zinc-300 bg-white px-2 py-1 text-xs text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50"
                             >
                         </div>
                     </div>
@@ -183,7 +189,7 @@
 
                 <div class="mt-3 overflow-x-auto">
                     <table class="min-w-full divide-y divide-zinc-200 text-xs dark:divide-zinc-700">
-                        <thead class="text-[11px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        <thead class="text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                             <tr>
                                 <th class="px-2 py-1 text-left">{{ __('Name') }}</th>
                                 <th class="px-2 py-1 text-left">{{ __('Email') }}</th>
@@ -201,7 +207,7 @@
                                     <td class="px-2 py-1 text-zinc-600 dark:text-zinc-200">{{ ucfirst($user->role->name) }}</td>
                                     <td class="px-2 py-1 text-zinc-600 dark:text-zinc-200">{{ $user->division?->name ?? '—' }}</td>
                                     <td class="px-2 py-1">
-                                        <span class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium {{ $user->is_active ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100' : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300' }}">
+                                        <span class="inline-flex rounded-md px-2 py-0.5 text-xs font-medium {{ $user->is_active ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100' : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300' }}">
                                             {{ $user->is_active ? __('Active') : __('Inactive') }}
                                         </span>
                                     </td>
@@ -209,7 +215,8 @@
                                         <button
                                             type="button"
                                             wire:click="edit({{ $user->id }})"
-                                            class="inline-flex items-center rounded-full border border-zinc-300 px-3 py-0.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                                            @click="showForm = true"
+                                            class="inline-flex items-center rounded-lg border border-zinc-300 px-3 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
                                         >
                                             {{ __('Edit') }}
                                         </button>
@@ -226,7 +233,7 @@
                     </table>
                 </div>
 
-                <div class="mt-3 flex items-center justify-between text-[11px] text-zinc-500 dark:text-zinc-400">
+                <div class="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
                     <div>
                         {{ __('Showing') }}
                         <span class="font-semibold text-zinc-700 dark:text-zinc-200">
@@ -285,7 +292,7 @@
                         <button
                             type="button"
                             wire:click="closeImport"
-                            class="inline-flex items-center rounded-full border border-zinc-300 px-4 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                            class="inline-flex items-center rounded-lg border border-zinc-300 px-4 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
                         >
                             {{ __('Cancel') }}
                         </button>
@@ -293,7 +300,7 @@
                             type="submit"
                             wire:loading.attr="disabled"
                             wire:target="previewImport,importFile"
-                            class="inline-flex items-center rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                            class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-500 dark:hover:bg-indigo-400"
                         >
                             <span wire:loading.remove wire:target="previewImport,importFile">
                                 {{ __('Preview Import') }}
@@ -403,7 +410,7 @@
                         <button
                             type="button"
                             wire:click="closeImport"
-                            class="inline-flex items-center rounded-full border border-zinc-300 px-4 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                            class="inline-flex items-center rounded-lg border border-zinc-300 px-4 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-100 dark:hover:bg-zinc-800"
                         >
                             {{ __('Close') }}
                         </button>
@@ -412,7 +419,7 @@
                             wire:click="commitImport"
                             wire:loading.attr="disabled"
                             wire:target="commitImport"
-                            class="inline-flex items-center rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                            class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-500 dark:hover:bg-indigo-400"
                         >
                             <span wire:loading.remove wire:target="commitImport">
                                 {{ __('Apply Valid Rows') }}
@@ -425,7 +432,7 @@
                 @endif
 
                 @if ($importCommitted)
-                    <p class="mt-2 text-[11px] text-emerald-700 dark:text-emerald-300">
+                    <p class="mt-2 text-xs text-emerald-700 dark:text-emerald-300">
                         {{ __('Import completed. Users have been updated based on valid rows.') }}
                     </p>
                 @endif

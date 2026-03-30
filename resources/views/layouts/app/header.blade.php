@@ -29,68 +29,80 @@
                 @if ($user)
                     @if ($user->role === \App\Enums\UserRole::Manager)
                         <flux:sidebar.group :heading="__('Platform')">
-                            <flux:sidebar.item icon="layout-grid" :href="route('manager.dashboard')" :current="request()->routeIs('manager.*')" wire:navigate>
+                            <flux:sidebar.item icon="squares-2x2" :href="route('manager.dashboard')" :current="request()->routeIs('manager.dashboard')" wire:navigate>
                                 {{ __('Dashboard')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="book-open-text" :href="route('manager.daily-entry')" :current="request()->routeIs('manager.daily-entry')" wire:navigate>
+                            <flux:sidebar.item icon="clipboard" :href="route('manager.daily-entry')" :current="request()->routeIs('manager.daily-entry')" wire:navigate>
                                 {{ __('Daily Entry')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="folder-git-2" :href="route('manager.history')" :current="request()->routeIs('manager.history')" wire:navigate>
+                            <flux:sidebar.item icon="clock" :href="route('manager.history')" :current="request()->routeIs('manager.history')" wire:navigate>
                                 {{ __('History')  }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
+
                     @elseif ($user->role === \App\Enums\UserRole::Hod)
-                        <flux:sidebar.group :heading="__('Platform')">
-                            <flux:sidebar.item icon="layout-grid" :href="route('hod.dashboard')" :current="request()->routeIs('hod.dashboard')" wire:navigate>
+                        <flux:sidebar.group :heading="__('Personal')">
+                            <flux:sidebar.item icon="squares-2x2" :href="route('hod.dashboard')" :current="request()->routeIs('hod.dashboard')" wire:navigate>
                                 {{ __('Dashboard')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="book-open-text" :href="route('hod.daily-entry')" :current="request()->routeIs('hod.daily-entry')" wire:navigate>
+                            <flux:sidebar.item icon="clipboard" :href="route('hod.daily-entry')" :current="request()->routeIs('hod.daily-entry')" wire:navigate>
                                 {{ __('Daily Entry')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="folder-git-2" :href="route('hod.history')" :current="request()->routeIs('hod.history')" wire:navigate>
+                            <flux:sidebar.item icon="clock" :href="route('hod.history')" :current="request()->routeIs('hod.history')" wire:navigate>
                                 {{ __('History')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('hod.big-rocks')" :current="request()->routeIs('hod.big-rocks')" wire:navigate>
+                        </flux:sidebar.group>
+
+                        <flux:sidebar.group :heading="__('Division')">
+                            <flux:sidebar.item icon="cube" :href="route('hod.big-rocks')" :current="request()->routeIs('hod.big-rocks')" wire:navigate>
                                 {{ __('Big Rocks')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('hod.division-entries')" :current="request()->routeIs('hod.division-entries')" wire:navigate>
+                            <flux:sidebar.item icon="user-group" :href="route('hod.division-entries')" :current="request()->routeIs('hod.division-entries')" wire:navigate>
                                 {{ __('Division Entries')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('hod.division-summary')" :current="request()->routeIs('hod.division-summary')" wire:navigate>
+                            <flux:sidebar.item icon="presentation-chart-bar" :href="route('hod.division-summary')" :current="request()->routeIs('hod.division-summary')" wire:navigate>
                                 {{ __('Division Summary')  }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
+
                     @elseif ($user->role === \App\Enums\UserRole::Director)
-                        <flux:sidebar.group :heading="__('Platform')">
-                            <flux:sidebar.item icon="layout-grid" :href="route('director.dashboard')" :current="request()->routeIs('director.dashboard')" wire:navigate>
+                        <flux:sidebar.group :heading="__('Monitoring')">
+                            <flux:sidebar.item icon="squares-2x2" :href="route('director.dashboard')" :current="request()->routeIs('director.dashboard')" wire:navigate>
                                 {{ __('Dashboard')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="book-open-text" :href="route('director.company')" :current="request()->routeIs('director.company')" wire:navigate>
+                            <flux:sidebar.item icon="building-office" :href="route('director.company')" :current="request()->routeIs('director.company')" wire:navigate>
                                 {{ __('Company')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="folder-git-2" :href="route('director.divisions')" :current="request()->routeIs('director.divisions')" wire:navigate>
+                            <flux:sidebar.item icon="rectangle-group" :href="route('director.divisions')" :current="request()->routeIs('director.divisions')" wire:navigate>
                                 {{ __('Divisions')  }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
+
                     @elseif ($user->role === \App\Enums\UserRole::Admin)
-                        <flux:sidebar.group :heading="__('Platform')">
-                            <flux:sidebar.item icon="layout-grid" :href="route('admin.home')" :current="request()->routeIs('admin.home')" wire:navigate>
+                        <flux:sidebar.group :heading="__('System')">
+                            <flux:sidebar.item icon="squares-2x2" :href="route('admin.home')" :current="request()->routeIs('admin.home')" wire:navigate>
                                 {{ __('Admin Home')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="book-open-text" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>
+                            <flux:sidebar.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>
                                 {{ __('Users')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="folder-git-2" :href="route('admin.divisions')" :current="request()->routeIs('admin.divisions')" wire:navigate>
+                            <flux:sidebar.item icon="building-office" :href="route('admin.divisions')" :current="request()->routeIs('admin.divisions')" wire:navigate>
                                 {{ __('Divisions')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('admin.hod-assignment')" :current="request()->routeIs('admin.hod-assignment')" wire:navigate>
+                            <flux:sidebar.item icon="user-group" :href="route('admin.hod-assignment')" :current="request()->routeIs('admin.hod-assignment')" wire:navigate>
                                 {{ __('HoD Assignment')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('admin.report-settings')" :current="request()->routeIs('admin.report-settings')" wire:navigate>
+                        </flux:sidebar.group>
+
+                        <flux:sidebar.group :heading="__('Operations')">
+                            <flux:sidebar.item icon="adjustments-horizontal" :href="route('admin.report-settings')" :current="request()->routeIs('admin.report-settings')" wire:navigate>
                                 {{ __('Report Settings')  }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="layout-grid" :href="route('admin.override')" :current="request()->routeIs('admin.override')" wire:navigate>
+                            <flux:sidebar.item icon="shield-exclamation" :href="route('admin.override')" :current="request()->routeIs('admin.override')" wire:navigate>
                                 {{ __('Override')  }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="bell" :href="route('admin.notifications')" :current="request()->routeIs('admin.notifications')" wire:navigate>
+                                {{ __('Notification History')  }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
                     @endif

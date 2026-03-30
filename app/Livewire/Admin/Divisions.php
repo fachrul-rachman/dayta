@@ -65,6 +65,8 @@ class Divisions extends Component
         }
 
         $this->create();
+
+        $this->dispatch('toast', message: __('Division saved successfully.'), type: 'success');
     }
 
     public function openImport(): void
@@ -116,6 +118,8 @@ class Divisions extends Component
         $this->importErrors = 0;
 
         $this->dispatch('divisions-imported');
+
+        $this->dispatch('toast', message: __('Divisions imported successfully.'), type: 'success');
     }
 
     public function closeImport(): void

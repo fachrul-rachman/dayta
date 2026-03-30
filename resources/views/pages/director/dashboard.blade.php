@@ -5,12 +5,19 @@
             :value="$companySubmissionRate !== null ? $companySubmissionRate.'%' : '—'"
             helper="Submission completion today"
             :href="route('director.company')"
+            :variant="match(true) {
+                $companySubmissionRate === null => 'default',
+                $companySubmissionRate >= 80 => 'success',
+                $companySubmissionRate >= 50 => 'warning',
+                default => 'danger',
+            }"
         ></x-dashboard.card>
         <x-dashboard.card
             title="Company Flags"
             :value="$companyFlags"
             helper="All severity levels"
             :href="route('director.company')"
+            :variant="$companyFlags > 0 ? 'danger' : 'default'"
         ></x-dashboard.card>
         <x-dashboard.card
             title="Division Requiring Attention"
@@ -19,6 +26,7 @@
                 ? ($divisionNeedingAttention['flags'].' flags · '.(($divisionNeedingAttention['submission_rate'] ?? null) !== null ? $divisionNeedingAttention['submission_rate'].'% submitted' : 'no reporters'))
                 : 'No division highlighted today'"
             :href="route('director.divisions')"
+            :variant="$divisionNeedingAttention ? 'warning' : 'default'"
         ></x-dashboard.card>
         <x-dashboard.card
             title="Company Overview"

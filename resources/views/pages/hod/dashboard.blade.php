@@ -8,11 +8,23 @@
             title="My Plan Status"
             :value="$ownToday?->plan_status?->name ?? 'LOCKED'"
             :href="route('hod.daily-entry')"
+            :variant="match($ownToday?->plan_status?->name) {
+                'SUBMITTED' => 'success',
+                'DRAFT' => 'warning',
+                'OPEN' => 'warning',
+                default => 'default',
+            }"
         />
         <x-dashboard.card
             title="My Realization Status"
             :value="$ownToday?->realization_status?->name ?? 'LOCKED'"
             :href="route('hod.daily-entry')"
+            :variant="match($ownToday?->realization_status?->name) {
+                'SUBMITTED' => 'success',
+                'DRAFT' => 'warning',
+                'OPEN' => 'warning',
+                default => 'default',
+            }"
         />
         <x-dashboard.card
             title="Team Submission"
@@ -23,6 +35,7 @@
             title="Division Flags"
             :value="$divisionFlagsCount"
             :href="route('hod.division-summary')"
+            :variant="$divisionFlagsCount > 0 ? 'danger' : 'default'"
         />
         <x-dashboard.card
             title="Big Rock Alignment"
