@@ -184,7 +184,30 @@
                                     ></textarea>
                                 </div>
 
-                                <div class="mt-3 space-y-1">
+                                <div
+                                    class="mt-3 space-y-1"
+                                    x-data="{
+                                        maxBytes: 50 * 1024 * 1024,
+                                        handleAttachmentChange(event) {
+                                            const files = event.target.files || [];
+
+                                            for (const file of files) {
+                                                if (file.size > this.maxBytes) {
+                                                    window.dispatchEvent(new CustomEvent('toast', {
+                                                        detail: {
+                                                            message: '{{ __('Each attachment must be 50MB or smaller.') }}',
+                                                            variant: 'error',
+                                                        },
+                                                    }));
+
+                                                    event.target.value = '';
+
+                                                    break;
+                                                }
+                                            }
+                                        },
+                                    }"
+                                >
                                     <div>
                                         <label class="block text-xs font-medium text-zinc-600 dark:text-zinc-300">
                                             {{ __('Attachments (optional)') }}
@@ -193,9 +216,13 @@
                                             type="file"
                                             multiple
                                             wire:model="{{ $mode === 'plan' ? "planUploads.$index" : "realizationUploads.$index" }}"
+                                            x-on:change.capture="handleAttachmentChange($event)"
                                             @disabled(! $isEditable)
                                             class="mt-1 block w-full text-xs text-zinc-700 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-100 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-zinc-700 hover:file:bg-zinc-200 dark:text-zinc-200 dark:file:bg-zinc-800 dark:file:text-zinc-100 dark:hover:file:bg-zinc-700"
                                         />
+                                        <p class="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+                                            {{ __('Maximum file size: 50MB per attachment.') }}
+                                        </p>
                                         @error($mode === 'plan' ? "planUploads.$index.*" : "realizationUploads.$index.*")
                                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                         @enderror

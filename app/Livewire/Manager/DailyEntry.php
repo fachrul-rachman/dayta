@@ -193,7 +193,7 @@ class DailyEntry extends Component
                 'planItems.*.big_rock_id' => 'nullable|integer',
                 'planItems.*.planned_hours' => 'nullable|numeric|min:0',
                 'planItems.*.notes' => 'nullable|string',
-                'planUploads.*.*' => 'file',
+                'planUploads.*.*' => 'file|max:51200',
             ]);
 
             $this->entry->plan_status = $draft ? DailyPlanStatus::Draft : DailyPlanStatus::Submitted;
@@ -214,7 +214,7 @@ class DailyEntry extends Component
                 'realizationItems.*.big_rock_id' => 'nullable|integer',
                 'realizationItems.*.realized_hours' => 'nullable|numeric|min:0',
                 'realizationItems.*.notes' => 'nullable|string',
-                'realizationUploads.*.*' => 'file',
+                'realizationUploads.*.*' => 'file|max:51200',
             ]);
 
             $this->entry->realization_status = $draft ? DailyRealizationStatus::Draft : DailyRealizationStatus::Submitted;
